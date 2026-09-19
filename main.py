@@ -1527,6 +1527,28 @@ async function analyzePassword() {{
                 password: password
             }})
         }});
+
+        const data = await response.json();
+
+        result.innerHTML = `
+            <p><strong>Strength:</strong> ${{data.strength}}</p>
+            <p><strong>Score:</strong> ${{data.score}}/100</p>
+            <p><strong>Policy compliant:</strong> ${{data.policy_compliant ? "Yes" : "No"}}</p>
+            <h4>Password Checks</h4>
+            <ul>
+                <li>Minimum 12 characters: ${{data.checks.minimum_length ? "✅" : "❌"}}</li>
+                <li>Uppercase: ${{data.checks.uppercase ? "✅" : "❌"}}</li>
+                <li>Lowercase: ${{data.checks.lowercase ? "✅" : "❌"}}</li>
+                <li>Number: ${{data.checks.number ? "✅" : "❌"}}</li>
+                <li>Special character: ${{data.checks.special_character ? "✅" : "❌"}}</li>
+            </ul>
+        `;
+    }} catch (error) {{
+        result.innerHTML = "<p>Unable to analyze password.</p>";
+    }}
+}}
+
+
 async function askPolicy() {{
     const question = document.getElementById("policy-question").value;
     const result = document.getElementById("policy-result");
@@ -1561,27 +1583,7 @@ async function askPolicy() {{
         result.innerHTML = "<p>Unable to retrieve policy information.</p>";
     }}
 }}
-        const data = await response.json();
-
-        result.innerHTML = `
-            <p><strong>Strength:</strong> ${{data.strength}}</p>
-            <p><strong>Score:</strong> ${{data.score}}/100</p>
-            <p><strong>Policy compliant:</strong> ${{data.policy_compliant ? "Yes" : "No"}}</p>
-            <h4>Password Checks</h4>
-            <ul>
-                <li>Minimum 12 characters: ${{data.checks.minimum_length ? "✅" : "❌"}}</li>
-                <li>Uppercase: ${{data.checks.uppercase ? "✅" : "❌"}}</li>
-                <li>Lowercase: ${{data.checks.lowercase ? "✅" : "❌"}}</li>
-                <li>Number: ${{data.checks.number ? "✅" : "❌"}}</li>
-                <li>Special character: ${{data.checks.special_character ? "✅" : "❌"}}</li>
-            </ul>
-        `;
-    }} catch (error) {{
-        result.innerHTML = "<p>Unable to analyze password.</p>";
-    }}
-}}
 </script>
-
 </body>
 </html>
 """
