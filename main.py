@@ -61,8 +61,8 @@ class PasswordRequest(BaseModel):
 @app.post("/api/security/password")
 def check_password_security(request: PasswordRequest):
     return analyze_password(request.password)
-
-
+    
+    
 mining_stages = [
     {
         "id": 1,
