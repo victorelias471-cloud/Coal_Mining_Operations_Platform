@@ -1527,7 +1527,40 @@ async function analyzePassword() {{
                 password: password
             }})
         }});
+async function askPolicy() {{
+    const question = document.getElementById("policy-question").value;
+    const result = document.getElementById("policy-result");
 
+    if (!question) {{
+        result.innerHTML = "<p>Please enter a policy question.</p>";
+        return;
+    }}
+
+    result.innerHTML = "<p>Searching policy...</p>";
+
+    try {{
+        const response = await fetch("/api/policy/explain", {{
+            method: "POST",
+            headers: {{
+                "Content-Type": "application/json"
+            }},
+            body: JSON.stringify({{
+                question: question
+            }})
+        }});
+
+        const data = await response.json();
+
+        result.innerHTML = `
+            <h4>Policy Explanation</h4>
+            <p>${{data.answer}}</p>
+            <p><strong>Source:</strong> ${{data.source}}</p>
+            ${{data.topic ? `<p><strong>Topic:</strong> ${{data.topic}}</p>` : ""}}
+        `;
+    }} catch (error) {{
+        result.innerHTML = "<p>Unable to retrieve policy information.</p>";
+    }}
+}}
         const data = await response.json();
 
         result.innerHTML = `
