@@ -1288,7 +1288,34 @@ footer {{
         {site_cards}
     </div>
 </section>
+<section class="section" id="security">
+    <div class="section-header">
+        <div>
+            <div class="section-label">Security Center</div>
+            <h2 class="section-title">Password Security</h2>
+        </div>
 
+        <p class="section-description">
+            Check password strength and security policy compliance.
+        </p>
+    </div>
+
+    <div class="panel">
+        <h3>Password Security Analyzer</h3>
+
+        <input
+            type="password"
+            id="security-password"
+            placeholder="Enter a test password"
+        >
+
+        <button onclick="analyzePassword()">
+            Analyze Password
+        </button>
+
+        <div id="security-result"></div>
+    </div>
+</section>
 <section class="operations" id="operations">
     <div class="section">
 
@@ -1422,7 +1449,41 @@ footer {{
 
     </div>
 </footer>
+<script>
+async function analyzePassword() {
+    const password = document.getElementById("security-password").value;
+    const result = document.getElementById("security-result");
 
+    if (!password) {
+        result.innerHTML = "<p>Please enter a password to analyze.</p>";
+        return;
+    }
+
+    result.innerHTML = "<p>Analyzing...</p>";
+
+    try {
+        const response = await fetch("/api/security/password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        result.innerHTML = `
+            <p><strong>Strength:</strong> ${data.strength}</p>
+            <p><strong>Score:</strong> ${data.score}/100</p>
+            <p><strong>Policy compliant:</strong> ${data.policy_compliant ? "Yes" : "No"}</p>
+        `;
+    } catch (error) {
+        result.innerHTML = "<p>Unable to analyze password.</p>";
+    }
+}
+</script>
 </body>
 </html>
 """
