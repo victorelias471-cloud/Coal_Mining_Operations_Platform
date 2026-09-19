@@ -1439,7 +1439,31 @@ footer {{
 
     </div>
 </section>
+<section class="section" id="security">
+    <div class="section-header">
+        <div>
+            <div class="section-label">Security Center</div>
+            <h2 class="section-title">Password Security</h2>
+        </div>
 
+        <p class="section-description">
+            Check password strength and security policy compliance.
+        </p>
+    </div>
+
+    <div class="panel">
+        <h3>Password Security Analyzer</h3>
+
+        <p>
+            Password security analysis is available through the
+            MineCore security API.
+        </p>
+
+        <a href="/api/security/password">
+            Security API →
+        </a>
+    </div>
+</section>
 <footer>
     <div class="footer">
 
