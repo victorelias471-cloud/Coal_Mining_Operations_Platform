@@ -1316,6 +1316,34 @@ footer {{
     </div>
 </section>
 <section class="section" id="security">
+<section class="section" id="policy">
+    <div class="section-header">
+        <div>
+            <div class="section-label">AI Policy Explainer</div>
+            <h2 class="section-title">Mining Policy Assistant</h2>
+        </div>
+
+        <p class="section-description">
+            Ask questions about mining safety and operational policies.
+        </p>
+    </div>
+
+    <div class="panel">
+        <h3>Ask a Policy Question</h3>
+
+        <input
+            type="text"
+            id="policy-question"
+            placeholder="e.g. What PPE is required?"
+        >
+
+        <button onclick="askPolicy()">
+            Explain Policy
+        </button>
+
+        <div id="policy-result"></div>
+    </div>
+</section>
     <div class="section-header">
         <div>
             <div class="section-label">Security Center</div>
