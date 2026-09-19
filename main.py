@@ -4,7 +4,34 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime, timezone
 from password_security import analyze_password
-
+# MineCore Policy Knowledge Base
+POLICY_KNOWLEDGE = [
+    {
+        "topic": "PPE",
+        "content": "All personnel working in mining operations must use appropriate personal protective equipment (PPE). PPE helps protect workers from hazards associated with mining activities.",
+        "source": "Worker Safety Manual — PPE Safety"
+    },
+    {
+        "topic": "Equipment Inspection",
+        "content": "Mining equipment should be inspected before operation to identify defects or unsafe conditions. Equipment with safety concerns should not be operated until the issue is addressed.",
+        "source": "Equipment Safety Guidelines — Inspection"
+    },
+    {
+        "topic": "Heavy Equipment",
+        "content": "Personnel should maintain a safe distance from operating heavy equipment and remain aware of equipment movement and designated safety zones.",
+        "source": "Worker Safety Manual — Heavy Equipment Safety"
+    },
+    {
+        "topic": "Training",
+        "content": "Only trained and authorized personnel should operate mining equipment. Workers should receive appropriate safety training before performing hazardous mining activities.",
+        "source": "Company Mining Procedures — Personnel Training"
+    },
+    {
+        "topic": "Environmental Monitoring",
+        "content": "Mining operations should include environmental monitoring and appropriate measures to reduce environmental impacts during mining and reclamation activities.",
+        "source": "Environmental Policy — Monitoring and Reclamation"
+    }
+]
 app = FastAPI(
     title="MineCore",
     description="Mining Operations Management Platform",
@@ -1569,6 +1596,37 @@ def get_safety_requirements(stage_id: int):
         "safety_requirements": stage["safety_requirements"]
     }
 @app.post("/api/security/password")
+class PolicyQuestion(BaseModel):
+    question: str = Field(..., min_length=2)
+
+
+@app.post("/api/policy/explain")
+def explain_policy(request: PolicyQuestion):
+    question = request.question.lower()
+
+    # Simple retrieval: find the policy entries most related to the question
+    matches = []
+
+    for policy in POLICY_KNOWLEDGE:
+        keywords = policy["topic"].lower().split()
+
+        if any(keyword in question for keyword in keywords):
+            matches.append(policy)
+
+    if not matches:
+        return {
+            "answer": "No matching policy was found for this question.",
+            "source": "MineCore Policy Knowledge Base",
+            "matches": []
+        }
+
+    best_match = matches[0]
+
+    return {
+        "answer": best_match["content"],
+        "source": best_match["source"],
+        "topic": best_match["topic"]
+    }
 def check_password_security(request: PasswordRequest):
     return analyze_password(request.password)
 
