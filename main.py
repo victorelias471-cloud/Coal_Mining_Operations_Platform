@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime, timezone
+from password_security import analyze_password
 
 app = FastAPI(
     title="MineCore",
@@ -51,7 +52,8 @@ class HealthResponse(BaseModel):
     service: str
     version: str
     timestamp: str
-
+class PasswordRequest(BaseModel):
+    password: str = Field(..., min_length=1)
 
 mining_stages = [
     {
@@ -1495,7 +1497,9 @@ def get_safety_requirements(stage_id: int):
         "requirement_count": len(stage["safety_requirements"]),
         "safety_requirements": stage["safety_requirements"]
     }
-
+@app.post("/api/security/password")
+def check_password_security(request: PasswordRequest):
+    return analyze_password(request.password)
 
 @app.get(
     "/api/sites",
