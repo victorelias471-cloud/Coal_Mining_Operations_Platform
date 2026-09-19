@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Query
+from password_security import analyze_password
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from typing import List, Optional
