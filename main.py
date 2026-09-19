@@ -54,6 +54,15 @@ class HealthResponse(BaseModel):
     timestamp: str
 
 
+class PasswordRequest(BaseModel):
+    password: str = Field(..., min_length=1)
+
+
+@app.post("/api/security/password")
+def check_password_security(request: PasswordRequest):
+    return analyze_password(request.password)
+
+
 mining_stages = [
     {
         "id": 1,
